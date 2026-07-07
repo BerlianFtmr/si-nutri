@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Si-Nutri Balita - Portal Prediksi Dini Gizi Balita</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .screen-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .gauge-bar {
+            background: linear-gradient(to right, #ef4444 0%, #f59e0b 35%, #10b981 50%, #10b981 65%, #a855f7 100%);
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+    <nav class="bg-white border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-emerald-200">
+                        <i class="fa-solid fa-baby text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-lg bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">SI-NUTRI BALITA</span>
+                        <span class="hidden sm:inline-block ml-2 px-2.5 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-full">Sistem Pakar Gizi</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="showHistoryDrawer()" class="bg-slate-50 hover:bg-slate-100 active:scale-95 text-slate-700 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-200/60 transition flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-emerald-500"></i>
+                        <span>Riwayat Pengukuran</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+
+        <div id="screen-welcome" class="screen-transition space-y-8">
+            <div class="bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 rounded-3xl text-white p-8 sm:p-12 shadow-xl relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="bg-white/20 text-white text-xs font-bold px-3.5 py-1.5 rounded-full backdrop-blur-md uppercase tracking-wider">Deteksi Dini Gizi Balita</span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">Mulai prediksi status gizi balita Anda</h1>
+                    <p class="text-emerald-50 text-sm sm:text-base leading-relaxed">
+                        Sistem pakar skrining awal status gizi balita berdasarkan standar antropometri Kementerian Kesehatan RI & WHO secara instan.
+                    </p>
+                    <div class="pt-4 flex flex-wrap gap-4">
+                        <button onclick="navigateTo('screen-input')" class="bg-white hover:bg-emerald-50 text-emerald-700 font-bold px-6 py-3.5 rounded-2xl shadow-lg transition duration-150 active:scale-95 flex items-center gap-2">
+                            <span>Mulai Deteksi Sekarang</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-bolt"></i></div>
+                    <div>
+                        <h4 class="font-bold text-base text-slate-800">Perhitungan Pintar API</h4>
+                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Terhubung langsung dengan backend FastAPI cerdas untuk analitik z-score presisi tinggi.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-shield-heart"></i></div>
+                    <div>
+                        <h4 class="font-bold text-base text-slate-800">Standar Permenkes</h4>
+                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Saran tindakan medis didasarkan pada tabel standar Permenkes No 2. Tahun 2020.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-database"></i></div>
+                    <div>
+                        <h4 class="font-bold text-base text-slate-800">Log Riwayat Medis</h4>
+                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Data histori tumbuh kembang tersimpan aman di memori perangkat secara privat.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-input" class="screen-transition hidden space-y-6">
+            <div class="flex items-center gap-4">
+                <button onclick="navigateTo('screen-welcome')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 flex items-center justify-center text-slate-600 transition shadow-sm active:scale-95">
+                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                </button>
+                <div>
+                    <h2 class="font-extrabold text-2xl text-slate-800">Workspace Pengukuran</h2>
+                    <p class="text-xs text-slate-500">Lengkapi parameter fisik balita untuk dianalisis oleh server</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <div class="lg:col-span-7 bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <form id="form-gizi" onsubmit="processAnalysis(event)" class="space-y-6">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">Nama Balita</label>
+                                <input type="text" id="nama" placeholder="Contoh: Al-Fatih" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none text-sm text-slate-800 font-medium" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">Jenis Kelamin</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label for="jk-l" class="border-2 border-slate-150 rounded-xl p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/20 transition relative" id="label-jk-l">
+                                        <input type="radio" id="jk-l" name="jenis_kelamin" value="L" class="sr-only" onchange="toggleJK('L')">
+                                        <i class="fa-solid fa-mars text-blue-500 text-lg"></i>
+                                        <span class="text-[10px] font-bold text-slate-700 mt-1">Laki-laki</span>
+                                    </label>
+                                    
+                                    <label for="jk-p" class="border-2 border-slate-150 rounded-xl p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/20 transition relative" id="label-jk-p">
+                                        <input type="radio" id="jk-p" name="jenis_kelamin" value="P" class="sr-only" onchange="toggleJK('P')">
+                                        <i class="fa-solid fa-venus text-pink-500 text-lg"></i>
+                                        <span class="text-[10px] font-bold text-slate-700 mt-1">Perempuan</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-2 block">Umur (Bulan)</label>
+                                <input type="number" id="umur" min="0" max="60" value="12" class="w-full text-center py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-bold text-slate-800" required>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-2 block">Berat (kg)</label>
+                                <input type="number" id="berat" step="0.1" value="9.5" class="w-full text-center py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-bold text-slate-800" required>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-2 block">Tinggi (cm)</label>
+                                <input type="number" id="tinggi" step="0.1" value="75" class="w-full text-center py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-bold text-slate-800" required>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-dashed border-slate-200">
+                            <label class="block text-xs font-bold text-emerald-600 mb-2">🔄 Data Bulan Lalu (Opsional untuk cek Tren)</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <input type="number" id="berat_lalu" step="0.1" placeholder="Berat Lalu (kg)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm font-medium">
+                                </div>
+                                <div>
+                                    <input type="number" id="tinggi_lalu" step="0.1" placeholder="Tinggi Lalu (cm)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm font-medium">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button id="btnSubmit" type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-4 rounded-2xl shadow-lg transition duration-150 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-calculator text-lg"></i>
+                                <span>Hitung & Analisis ke Server API</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-slate-100 border border-slate-200/50 rounded-3xl p-6">
+                        <h3 class="font-extrabold text-base text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info text-emerald-600"></i><span>Panduan Akurat</span>
+                        </h3>
+                        <ul class="space-y-4 text-xs text-slate-600">
+                            <li class="flex gap-3"><div class="w-5 h-5 rounded-full bg-white text-emerald-600 font-bold flex items-center justify-center shrink-0 shadow-sm">1</div><span>Gunakan pakaian balita seminim mungkin saat penimbangan berat.</span></li>
+                            <li class="flex gap-3"><div class="w-5 h-5 rounded-full bg-white text-emerald-600 font-bold flex items-center justify-center shrink-0 shadow-sm">2</div><span>Isikan umur anak dalam hitungan <strong>bulan penuh</strong> (0-60 bulan).</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-result" class="screen-transition hidden space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-200">
+                <div class="flex items-center gap-4">
+                    <button onclick="navigateTo('screen-input')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 flex items-center justify-center text-slate-600 transition shadow-sm">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </button>
+                    <div>
+                        <h2 class="font-extrabold text-2xl text-slate-800">Laporan Hasil Skrining</h2>
+                        <p class="text-xs text-slate-500" id="res-timestamp">Diproses pada: -</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="shareToWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md transition flex gap-2 items-center">
+                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                    </button>
+                    <button onclick="saveToHistory()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm transition">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full translate-x-12 -translate-y-12"></div>
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div id="res-avatar" class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-inner text-white">
+                                <i class="fa-solid fa-baby"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-xl text-slate-800" id="res-nama">Nama Balita</h3>
+                                <div class="flex flex-wrap gap-2 mt-1.5">
+                                    <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md" id="res-jk">Jenis Kelamin</span>
+                                    <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md" id="res-umur">Umur</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mt-6 pt-6 border-t border-slate-100 text-center">
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-100/50">
+                                <span class="text-[9px] uppercase text-slate-400 font-bold block">Berat</span>
+                                <span class="text-sm font-extrabold text-slate-800 mt-0.5 block" id="res-berat">0.0 kg</span>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-100/50">
+                                <span class="text-[9px] uppercase text-slate-400 font-bold block">Tinggi</span>
+                                <span class="text-sm font-extrabold text-slate-800 mt-0.5 block" id="res-tinggi">0.0 cm</span>
+                            </div>
+                            <div class="bg-emerald-50 p-2 rounded-xl border border-emerald-100/50">
+                                <span class="text-[9px] uppercase text-emerald-600 font-bold block">IMT</span>
+                                <span class="text-sm font-extrabold text-emerald-700 mt-0.5 block" id="res-imt">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Gauge Berat Badan (BB/U)</span>
+                            <span class="text-xs font-bold text-slate-700" id="res-zscore-val">0.0 SD</span>
+                        </div>
+                        <div class="relative pt-6">
+                            <div class="h-3 w-full rounded-full gauge-bar relative">
+                                <div id="gauge-pin" class="absolute -top-1 w-5 h-5 bg-white border-4 border-slate-800 rounded-full shadow-md -translate-x-1/2 transition-all duration-700" style="left: 50%;"></div>
+                            </div>
+                            <div class="flex justify-between text-[9px] text-slate-400 font-bold mt-2 px-1">
+                                <span>-3</span><span>-2</span><span>Med</span><span>+1</span><span>+3</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Tinggi Badan (TB/U)</p>
+                                <p class="text-xs font-bold text-slate-700 mt-0.5" id="res-status-tb">-</p>
+                            </div>
+                            <span class="bg-slate-100 px-3 py-1 rounded-lg text-xs font-bold text-slate-600" id="res-zscore-tb">0.0 SD</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200/80 rounded-3xl p-6 flex gap-4 items-start shadow-sm">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center shrink-0 text-amber-600 text-xl shadow-inner">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="space-y-1.5 mt-0.5">
+                            <h5 class="text-[11px] font-extrabold text-amber-900 uppercase tracking-wider">Peringatan Deteksi Dini</h5>
+                            <p class="text-xs text-amber-800 leading-relaxed font-medium">
+                                Sistem ini murni sebagai instrumen <b>deteksi dini</b>. Jika Anda ingin melakukan skrining lebih lanjut atau balita menunjukkan gejala kelainan kompleks, <b>segera hubungi tenaga medis / fasilitas kesehatan terdekat.</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <div id="status-card" class="rounded-3xl p-6 border flex gap-4 transition duration-300">
+                        <div id="status-icon-box" class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-sm text-white">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="text-[10px] font-bold uppercase tracking-wider opacity-75 block">Status Penilaian Sistem (BB/U)</span>
+                            <h3 id="status-title" class="text-2xl font-black">Status Gizi</h3>
+                            <p id="status-desc" class="text-xs leading-relaxed opacity-90">Evaluasi dari perhitungan backend FastAPI.</p>
+                        </div>
+                    </div>
+
+                    <div id="cardTren" class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hidden">
+                        <h4 class="font-extrabold text-sm text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-trend-up text-blue-500"></i><span>Evaluasi Kenaikan Bulanan</span>
+                        </h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-3 bg-slate-50 rounded-xl text-xs">
+                                <span class="text-slate-400 block mb-1">BB Naik: <b class="text-slate-700" id="tren_bb"></b></span>
+                                <span class="text-[10px] text-slate-400">Target Min: <span id="target_bb"></span></span>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-xl text-xs">
+                                <span class="text-slate-400 block mb-1">TB Naik: <b class="text-slate-700" id="tren_tb"></b></span>
+                                <span class="text-[10px] text-slate-400">Target Min: <span id="target_tb"></span></span>
+                            </div>
+                        </div>
+                        <p id="kesimpulan_tren" class="mt-3 p-2 bg-blue-50 text-blue-800 rounded-lg text-xs font-bold text-center"></p>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
+                        <h4 class="font-extrabold text-sm text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-user-doctor text-emerald-500"></i><span>Rekomendasi Tindakan Gizi</span>
+                        </h4>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-2xl">
+                                <i class="fa-solid fa-weight-scale text-emerald-500 mt-1"></i>
+                                <p class="text-xs text-slate-600" id="saran_bb"></p>
+                            </div>
+                            <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-2xl">
+                                <i class="fa-solid fa-ruler text-emerald-500 mt-1"></i>
+                                <p class="text-xs text-slate-600" id="saran_tb"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="history-drawer" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden transition duration-300 flex justify-end">
+        <div class="w-full max-w-md bg-white h-full shadow-2xl flex flex-col overflow-hidden transition-transform duration-300 translate-x-full" id="history-panel">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-emerald-600 text-lg"></i>
+                    <h3 class="font-extrabold text-slate-800">Riwayat Pengukuran</h3>
+                </div>
+                <button onclick="hideHistoryDrawer()" class="w-9 h-9 rounded-full bg-slate-200/60 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div id="history-list" class="flex-grow overflow-y-auto p-6 space-y-4"></div>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-100">
+                <button onclick="confirmClearHistory()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3.5 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-trash-can"></i> Bersihkan Semua Riwayat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-5 border border-slate-100">
+            <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center text-xl mx-auto"><i class="fa-solid fa-trash-can"></i></div>
+            <div class="text-center space-y-2">
+                <h4 class="font-extrabold text-lg text-slate-800">Hapus Semua Riwayat?</h4>
+                <p class="text-xs text-slate-500">Tindakan ini akan menghapus data permanen.</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeConfirmModal()" class="flex-1 bg-slate-100 text-slate-700 font-bold py-3 rounded-xl text-xs">Batal</button>
+                <button onclick="executeClearHistory()" class="flex-1 bg-red-600 text-white font-bold py-3 rounded-xl text-xs">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-toast" class="fixed bottom-6 right-6 bg-slate-900 text-white text-xs font-semibold px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3 transition duration-300 translate-y-24 opacity-0 z-50 pointer-events-none border-l-4 border-emerald-500">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base" id="toast-icon"></i>
+        <span id="toast-message">Notifikasi</span>
+    </div>
+
+    <script>
+        let currentScreen = 'screen-welcome';
+        let currentSelectedJK = null; 
+        let currentAnalysisResult = null;
+
+        function navigateTo(screenId) {
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-input').classList.add('hidden');
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
+            currentScreen = screenId;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleJK(jkCode) {
+            currentSelectedJK = jkCode;
+            const labelL = document.getElementById('label-jk-l');
+            const labelP = document.getElementById('label-jk-p');
+            
+            if (jkCode === 'L') {
+                labelL.classList.add('border-emerald-500', 'bg-emerald-50/20');
+                labelL.classList.remove('border-slate-100');
+                labelP.classList.add('border-slate-100');
+                labelP.classList.remove('border-emerald-500', 'bg-emerald-50/20');
+            } else {
+                labelP.classList.add('border-emerald-500', 'bg-emerald-50/20');
+                labelP.classList.remove('border-slate-100');
+                labelL.classList.add('border-slate-100');
+                labelL.classList.remove('border-emerald-500', 'bg-emerald-50/20');
+            }
+        }
+
+        // Tembak Data Ke FastAPI
+        async function processAnalysis(event) {
+            event.preventDefault();
+
+            // VALIDASI: Pastikan pengguna sudah memilih gender
+            if (!currentSelectedJK) {
+                showToast('Silakan pilih Jenis Kelamin balita terlebih dahulu!', 'error');
+                return;
+            }
+
+            const btnSubmit = document.getElementById('btnSubmit');
+            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menghitung...';
+            btnSubmit.disabled = true;
+
+            const nama = document.getElementById('nama').value.trim() || 'Balita';
+            const umur = parseInt(document.getElementById('umur').value);
+            const berat = parseFloat(document.getElementById('berat').value);
+            const tinggi = parseFloat(document.getElementById('tinggi').value);
+            const beratLalu = document.getElementById('berat_lalu').value ? parseFloat(document.getElementById('berat_lalu').value) : null;
+            const tinggiLalu = document.getElementById('tinggi_lalu').value ? parseFloat(document.getElementById('tinggi_lalu').value) : null;
+            
+            const payload = {
+                umur_bulan: umur, 
+                jenis_kelamin: currentSelectedJK,
+                berat_badan: berat, 
+                tinggi_badan: tinggi,
+                berat_badan_lalu: beratLalu, 
+                tinggi_badan_lalu: tinggiLalu
+            };
+
+            try {
+                // PANGGIL BACKEND
+                const response = await fetch('http://127.0.0.1:8000/api/evaluasi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const res = await response.json();
+                if(res.error) {
+                    showToast(res.error, 'error');
+                    return;
+                }
+
+                // Hitung IMT Aktual
+                const imt = (berat / Math.pow(tinggi/100, 2)).toFixed(1);
+
+                // Buat Object Riwayat Format Baru
+                currentAnalysisResult = {
+                    nama: nama,
+                    umur: umur,
+                    jk: currentSelectedJK === 'L' ? 'Laki-laki' : 'Perempuan',
+                    berat: berat,
+                    tinggi: tinggi,
+                    imt: imt,
+                    gizi: res.gizi,
+                    tren: res.tren,
+                    timestamp: new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'})
+                };
+
+                renderToResultScreen(currentAnalysisResult);
+
+            } catch (err) {
+                showToast('Gagal terhubung ke Server FastAPI!', 'error');
+                console.error(err);
+            } finally {
+                btnSubmit.innerHTML = '<i class="fa-solid fa-calculator text-lg"></i><span>Hitung & Analisis ke Server API</span>';
+                btnSubmit.disabled = false;
+            }
+        }
+
+        function renderToResultScreen(item) {
+            // Render Text Info
+            document.getElementById('res-nama').innerText = item.nama;
+            document.getElementById('res-jk').innerText = item.jk;
+            document.getElementById('res-umur').innerText = `${item.umur} Bln`;
+            document.getElementById('res-berat').innerText = `${item.berat} kg`;
+            document.getElementById('res-tinggi').innerText = `${item.tinggi} cm`;
+            document.getElementById('res-imt').innerText = item.imt;
+            document.getElementById('res-timestamp').innerText = `Diproses pada: ${item.timestamp}`;
+            
+            const z_bbu = item.gizi.indikator.BB_U.z_score;
+            document.getElementById('res-zscore-val').innerText = `${z_bbu} SD`;
+            
+            // Set Gauge Posisi (Range WHO -4 sd +4 di map ke persentase 0-100)
+            let zPercent = 50 + (z_bbu * 12.5); // 0 Z = 50% tengah
+            if (zPercent < 5) zPercent = 5;
+            if (zPercent > 95) zPercent = 95;
+            document.getElementById('gauge-pin').style.left = `${zPercent}%`;
+
+            // TB/U Info Text
+            document.getElementById('res-status-tb').innerText = item.gizi.indikator.TB_U.status;
+            document.getElementById('res-zscore-tb').innerText = `${item.gizi.indikator.TB_U.z_score} SD`;
+
+            // Avatar & Card Colorizer Berdasarkan Status Gizi BB/U
+            const avatarBox = document.getElementById('res-avatar');
+            avatarBox.className = item.jk === 'Laki-laki' 
+                ? "w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-inner bg-gradient-to-tr from-blue-400 to-indigo-500 text-white" 
+                : "w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-inner bg-gradient-to-tr from-pink-400 to-rose-500 text-white";
+            avatarBox.innerHTML = item.jk === 'Laki-laki' ? '<i class="fa-solid fa-mars"></i>' : '<i class="fa-solid fa-venus"></i>';
+
+            let statusColor = "", icon = "";
+            if (z_bbu < -3) { statusColor = "bg-red-50 border-red-500 text-red-800"; icon = "bg-red-500 fa-triangle-exclamation"; }
+            else if (z_bbu >= -3 && z_bbu < -2) { statusColor = "bg-amber-50 border-amber-400 text-amber-800"; icon = "bg-amber-500 fa-triangle-exclamation"; }
+            else if (z_bbu >= -2 && z_bbu <= 1) { statusColor = "bg-emerald-50 border-emerald-400 text-emerald-800"; icon = "bg-emerald-500 fa-circle-check"; }
+            else { statusColor = "bg-purple-50 border-purple-400 text-purple-800"; icon = "bg-purple-500 fa-scale-unbalanced"; }
+
+            const statusCard = document.getElementById('status-card');
+            statusCard.className = `rounded-3xl p-6 border flex gap-4 transition duration-300 ${statusColor}`;
+            document.getElementById('status-icon-box').className = `w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-sm text-white ${icon.split(' ')[0]}`;
+            document.getElementById('status-icon-box').innerHTML = `<i class="fa-solid ${icon.split(' ')[1]}"></i>`;
+            
+            document.getElementById('status-title').innerText = item.gizi.indikator.BB_U.status;
+            document.getElementById('status-desc').innerText = `Z-Score berada di kurva ${z_bbu} SD. Status TB/U: ${item.gizi.indikator.TB_U.status}`;
+
+            // Tren Section (Jika ada)
+            const cardTren = document.getElementById('cardTren');
+            if(item.tren && item.tren.tren_berat_badan) {
+                cardTren.classList.remove('hidden');
+                document.getElementById('tren_bb').innerText = item.tren.tren_berat_badan.kenaikan_aktual;
+                document.getElementById('target_bb').innerText = item.tren.tren_berat_badan.target_minimal;
+                document.getElementById('tren_tb').innerText = item.tren.tren_tinggi_badan.kenaikan_aktual;
+                document.getElementById('target_tb').innerText = item.tren.tren_tinggi_badan.target_minimal;
+                document.getElementById('kesimpulan_tren').innerText = item.tren.kesimpulan_tren;
+            } else {
+                cardTren.classList.add('hidden');
+            }
+
+            // Saran / Rekomendasi 
+            document.getElementById('saran_bb').innerHTML = `<b>BB/U:</b> ${item.gizi.indikator.BB_U.saran}`;
+            document.getElementById('saran_tb').innerHTML = `<b>TB/U:</b> ${item.gizi.indikator.TB_U.saran}`;
+
+            navigateTo('screen-result');
+            showToast('Laporan Analisis Berhasil Diperoleh!', 'success');
+        }
+
+        // ================= LOCAL STORAGE (HISTORY) LOGIC =================
+        function saveToHistory() {
+            if (!currentAnalysisResult) return;
+            let history = JSON.parse(localStorage.getItem('si_nutri_history')) || [];
+            history.unshift(currentAnalysisResult);
+            if (history.length > 20) history = history.slice(0, 20); // Limit 20 riwayat
+            localStorage.setItem('si_nutri_history', JSON.stringify(history));
+            showToast('Laporan berhasil disimpan ke riwayat lokal!', 'success');
+        }
+
+        function showHistoryDrawer() {
+            document.getElementById('history-drawer').classList.remove('hidden');
+            setTimeout(() => document.getElementById('history-panel').classList.remove('translate-x-full'), 10);
+            renderHistoryList();
+        }
+
+        function hideHistoryDrawer() {
+            document.getElementById('history-panel').classList.add('translate-x-full');
+            setTimeout(() => document.getElementById('history-drawer').classList.add('hidden'), 300);
+        }
+
+        function renderHistoryList() {
+                const listContainer = document.getElementById('history-list');
+                const history = JSON.parse(localStorage.getItem('si_nutri_history')) || [];
+                
+                if (history.length === 0) {
+                    listContainer.innerHTML = `<div class="text-center py-16 text-slate-400"><p class="text-xs font-bold">Belum Ada Riwayat</p></div>`;
+                    return;
+                }
+                
+                listContainer.innerHTML = history.map((item, index) => {
+                    // 1. Logika Warna Bullet & Badge Status Gizi (Beresiko: Merah, Kurang: Oranye, Normal: Hijau)
+                    let statusBullet = "bg-emerald-500";
+                    let statusBadgeColor = "bg-emerald-50 border-emerald-200 text-emerald-700";
+                    const statusText = item.gizi.indikator.BB_U.status;
+
+                    if (statusText.includes("Buruk") || statusText.includes("Sangat") || statusText.includes("Lebih") || statusText.includes("Obesitas")) {
+                        // Masuk kategori Beresiko tinggi
+                        statusBullet = "bg-red-500";
+                        statusBadgeColor = "bg-red-50 border-red-200 text-red-700";
+                    } else if (statusText.includes("Kurang") || statusText.includes("Risiko")) {
+                        // Masuk kategori Kurang / Berisiko ringan
+                        statusBullet = "bg-amber-500";
+                        statusBadgeColor = "bg-amber-50 border-amber-200 text-amber-700";
+                    } else {
+                        // Masuk kategori Normal
+                        statusBullet = "bg-emerald-500";
+                        statusBadgeColor = "bg-emerald-50 border-emerald-200 text-emerald-700";
+                    }
+
+                    // 2. Logika Placeholder Gender (Laki-laki: Biru, Perempuan: Pink)
+                    const isLakiLaki = item.jk.includes("Laki");
+                    const genderIcon = isLakiLaki ? "fa-mars" : "fa-venus";
+                    const genderTextColor = isLakiLaki ? "text-blue-600 bg-blue-50/70 border-blue-100" : "text-pink-600 bg-pink-50/70 border-pink-100";
+                    const genderLabel = isLakiLaki ? "Laki-laki" : "Perempuan";
+
+                    return `
+                    <div class="bg-white border border-slate-150 p-4 rounded-2xl cursor-pointer hover:border-slate-300 hover:shadow-md transition-all duration-200 flex justify-between items-center group relative overflow-hidden" onclick='loadHistoryByIndex(${index})'>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full ${statusBullet} animate-pulse"></span>
+                                <h4 class="font-extrabold text-sm text-slate-800 group-hover:text-emerald-600 transition-colors">${item.nama}</h4>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center gap-2 text-[10px] font-bold">
+                                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border ${genderTextColor}">
+                                    <i class="fa-solid ${genderIcon}"></i>
+                                    <span>Gender: ${genderLabel}</span>
+                                </span>
+                                
+                                <span class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-600">
+                                    <i class="fa-solid fa-cake-candles text-slate-400"></i>
+                                    <span>Umur: ${item.umur} Bulan</span>
+                                </span>
+
+                                <span class="text-slate-400 font-medium ml-1">
+                                    ${item.berat} kg • ${item.tinggi} cm
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-end gap-3 shrink-0 relative z-10">
+                            <span class="text-[10px] font-extrabold px-3 py-1 rounded-xl border tracking-wide uppercase shadow-sm ${statusBadgeColor}">
+                                ${statusText}
+                            </span>
+                            <button onclick="deleteSingleHistory(event, ${index})" class="text-slate-300 hover:text-red-500 p-1 rounded-lg hover:bg-red-50 transition-all duration-150">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+        function loadHistoryByIndex(index) {
+            const history = JSON.parse(localStorage.getItem('si_nutri_history')) || [];
+            hideHistoryDrawer();
+            
+            currentAnalysisResult = history[index]; 
+            renderToResultScreen(history[index]);
+        }
+
+        function deleteSingleHistory(event, index) {
+            event.stopPropagation();
+            let history = JSON.parse(localStorage.getItem('si_nutri_history')) || [];
+            history.splice(index, 1);
+            localStorage.setItem('si_nutri_history', JSON.stringify(history));
+            renderHistoryList();
+            showToast('Riwayat dihapus.', 'info');
+        }
+
+        function confirmClearHistory() { document.getElementById('confirm-modal').classList.remove('hidden'); }
+        function closeConfirmModal() { document.getElementById('confirm-modal').classList.add('hidden'); }
+        function executeClearHistory() {
+            localStorage.removeItem('si_nutri_history');
+            renderHistoryList();
+            closeConfirmModal();
+            showToast('Semua riwayat dikosongkan!', 'info');
+        }
+
+        function shareToWhatsApp() {
+            if (!currentAnalysisResult) return;
+            const item = currentAnalysisResult;
+
+            const z_bbu = item.gizi.indikator.BB_U.z_score;
+            let statusIcon = "";
+            if (z_bbu < -3.0) statusIcon = "🚨";
+            else if (z_bbu >= -3.0 && z_bbu < -2.0) statusIcon = "⚠️";
+            else if (z_bbu >= -2.0 && z_bbu <= 1.0) statusIcon = "🟢";
+            else statusIcon = "🍏";
+
+            const text = 
+`*📋 LAPORAN HASIL SKRINING GIZI BALITA*
+*Sistem Pakar SI-NUTRI BALITA*
+
+---
+
+*1. Biodata Anak*
+* *Nama Balita* : ${item.nama}
+* *Jenis Kelamin* : ${item.jk}
+* *Umur* : ${item.umur} Bulan
+* *Berat Badan* : ${item.berat} kg
+* *Tinggi Badan* : ${item.tinggi} cm
+
+------------------------------------------------------------------------------------------------------------------
+
+*2. Hasil Klasifikasi & Status Gizi*
+> *STATUS GIZI: ${statusIcon} ${item.gizi.indikator.BB_U.status}*
+> *Z-Score (BB/U)* : ${z_bbu}
+> *Keterangan* : ${item.gizi.saran_common || item.gizi.saran_umum}
+
+------------------------------------------------------------------------------------------------------------------
+
+*3. Rekomendasi Intervensi Awal*
+1. *Nutrisi Seimbang (Saran BB/U)*
+   ${item.gizi.indikator.BB_U.saran}
+2. *Saran Tinggi Badan (TB/U)*
+   ${item.gizi.indikator.TB_U.saran}
+3. *Pemantauan Rutin*
+   Rutin berkunjung ke Posyandu setiap bulan untuk melacak riwayat tumbuh kembang.
+4. *Kesehatan & Imunisasi*
+   Tuntaskan jadwal imunisasi wajib serta berikan vitamin A secara berkala sesuai ketentuan tenaga kesehatan.
+5. *Stimulasi Tumbuh Kembang*
+   Tingkatkan stimulasi motorik dan sensorik sesuai dengan klaster rentang usia anak.
+
+------------------------------------------------------------------------------------------------------------------
+_Laporan diproduksi mandiri oleh orang tua/kader via web app SI-NUTRI pada ${item.timestamp}_`;
+
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function showToast(msg, type='success') {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.className = `fixed bottom-6 right-6 bg-slate-900 text-white text-xs font-semibold px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-3 transition duration-300 z-50 pointer-events-auto border-l-4 ${type === 'success' ? 'border-emerald-500' : 'border-amber-500'}`;
+            document.getElementById('toast-icon').className = `fa-solid ${type === 'success' ? 'fa-circle-check text-emerald-400' : 'fa-circle-info text-amber-400'} text-base`;
+            
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 3000);
+        }
+    </script>
+</body>
+</html>
